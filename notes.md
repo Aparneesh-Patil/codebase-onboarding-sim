@@ -10,10 +10,37 @@ The goal is to build a backend so that we accept only zipped repo, scan the fold
     [X] Extract zip safely
     [X] Ignore unnecessary folders
     [X] Generate file tree
-    [ ] Count file extensions
-    [ ] Detect project type
-    [ ] Identify important files
-    [ ] Return JSON response
+    [X] Count file extensions
+    [X] Detect project type
+    [X] Identify important files
+    [X] Return JSON response
 
+## Current rule set to determine the project type:
+    pom.xml
+    -> Java Maven
 
+    pom.xml + .java + application.properties
+    -> Java Spring Boot
 
+    package.json
+    -> Node.js / JavaScript
+
+    package.json + src + App.js
+    -> React
+
+    package.json + next.config.js
+    -> Next.js
+
+    requirements.txt or .py
+    -> Python
+
+    go.mod
+    -> Go
+
+    MakeFile + .c
+    -> C
+
+    MakeFile + .cpp
+    -> C++
+
+This is just a base for Sprint 1. For future, I could introduce confidence scores and judge the project types based on that.
