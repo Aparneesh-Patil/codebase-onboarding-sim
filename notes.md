@@ -1,6 +1,6 @@
 # Sprint 1: Find a way to analyze the Repo
 
-The goal is to build a backend s.t. we accept only zipped repo, scan the folder structure and return basic codebase information.
+The goal is to build a backend so that we accept only zipped repo, scan the folder structure and return basic codebase information.
 
 
 ## First Tasks
@@ -8,7 +8,7 @@ The goal is to build a backend s.t. we accept only zipped repo, scan the folder 
     [X] Create upload endpoint
     [X] Validate zip file
     [X] Extract zip safely
-    [ ] Ignore unnecessary folders
+    [X] Ignore unnecessary folders
     [X] Generate file tree
     [ ] Count file extensions
     [ ] Detect project type
