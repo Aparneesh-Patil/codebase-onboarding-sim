@@ -1,5 +1,4 @@
 # Sprint 1: Find a way to analyze the Repo
-
 The goal is to build a backend so that we accept only zipped repo, scan the folder structure and return basic codebase information.
 
 
@@ -44,3 +43,19 @@ The goal is to build a backend so that we accept only zipped repo, scan the fold
     -> C++
 
 This is just a base for Sprint 1. For future, I could introduce confidence scores and judge the project types based on that.
+
+# Sprint 2: Add Repo Chatbot
+
+The goal is to connect the analyzer results to a basic chatbot so users can ask questions about the uploaded repo and understand where to start.
+
+## First Tasks
+    [ ] Read important code files from the repo
+    [ ] Ignore files that are too large or not useful for analysis
+    [ ] Create temporary repo context from file paths and contents
+    [ ] Create a chat endpoint
+    [ ] Pass the user question and repo context into the chatbot
+    [ ] Make answers based only on the uploaded repo
+    [ ] Show which files were used in the answer
+    [ ] Add a simple chat box on the frontend
+    [ ] Add starter onboarding questions
+    [ ] Test with personal repo
