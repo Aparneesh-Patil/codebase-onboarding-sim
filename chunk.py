@@ -46,8 +46,6 @@ def chunk_language(source_code: bytes, lang_type, file_path) -> list:
         chunks = []
 
         for node in nodes:
-            name_node = node.child_by_field_name("name")
-
             string = source_code[node.start_byte:node.end_byte].decode('utf-8') 
             chunk = Document(
                 id=str(uuid4()),
