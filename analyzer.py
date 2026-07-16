@@ -131,12 +131,7 @@ def load_file(file_obj, important_files):
     with zipfile.ZipFile(file_obj, 'r') as zf:
         for file_name in zf.namelist():
             if file_name in important_files:
-                if(file_name.rfind("/") == -1):
-                    short_file_name = file_name
-                else:
-                    short_file_name = file_name[file_name.rfind("/"):]
-                    
                 with zf.open(file_name, 'r') as r:
-                    loaded_files[short_file_name] = r.read().decode("utf-8")
+                    loaded_files[file_name] = r.read().decode("utf-8")
 
     return loaded_files
