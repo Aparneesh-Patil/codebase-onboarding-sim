@@ -2,6 +2,10 @@ from langchain_text_splitters import MarkdownHeaderTextSplitter
 from langchain_core.documents import Document
 from tree_sitter import Language, Parser, Node
 import tree_sitter_python as tspython
+import tree_sitter_cpp as tscpp
+import tree_sitter_javascript as tsjs
+import tree_sitter_html as tshtml
+import tree_sitter_css as tscss
 from uuid import uuid4
 
 
@@ -9,17 +13,33 @@ from uuid import uuid4
 def chunking_type(file_map):
     final = []
     for key, value in file_map.items():
-        if ".md" in key:
+        if key.lower().endswith(".js"):
+            source_code = value.encode('utf-8')
+            result = chunk_language(source_code, "javascript", key)
+            final.append(result)
+        elif key.lower().endswith(".md"):
             result = chunk_markdown(value, key)
             final.append(result)
-        elif ".py" in key:
+        elif key.lower().endswith(".py"):
             source_code = value.encode('utf-8')
             result = chunk_language(source_code, "python", key)
+            final.append(result)
+        elif key.lower().endswith(".cpp") or key.lower().endswith(".h"):
+            source_code = value.encode('utf-8')
+            result = chunk_language(source_code, "C++", key)
+            final.append(result)
+        elif key.lower().endswith(".html"):
+            source_code = value.encode('utf-8')
+            result = chunk_language(source_code, "html", key)
+            final.append(result)
+        elif key.lower().endswith(".css"):
+            source_code = value.encode('utf-8')
+            result = chunk_language(source_code, "css", key)
             final.append(result)
     
     return final 
 
-
+# function for chunking markdown files (the method to do this is chunk based on Headers)
 def chunk_markdown(markdown_text, file_path) -> list[Document]:
     headers_to_split_on = [
         ("#", "Header 1"),
@@ -35,38 +55,56 @@ def chunk_markdown(markdown_text, file_path) -> list[Document]:
 
     return documents
 
-
+# function for chunking coding files using AST (Abstract Syntax Trees) to parse the language into functions and classes and chuncking them that way
 def chunk_language(source_code: bytes, lang_type, file_path) -> list:
     if lang_type == "python":
         parser = Parser(Language(tspython.language()))
-        tree = parser.parse(source_code)
-        root = tree.root_node
-        
-        nodes = collect_nodes(root)
-        chunks = []
-
-        for node in nodes:
-            string = source_code[node.start_byte:node.end_byte].decode('utf-8') 
-            chunk = Document(
-                id=str(uuid4()),
-                page_content= string,
-                metadata={"start_line": node.start_point[0], "end_line": node.end_point[0], "file_path": file_path, "language": lang_type}
-            )
-            chunks.append(chunk)
-
-        return chunks
+        target_types = ['function_definition', 'class_definition']
+    elif lang_type == "C++":
+        parser = Parser(Language(tscpp.language()))
+        target_types = ['function_definition', 'class_definition', 'class_specifier']
+    elif lang_type == "javascript":
+        parser = Parser(Language(tsjs.language()))
+        target_types = ["function_declaration", "class_declaration", "method_definition", "arrow_function"]
+    elif lang_type == "html":
+        parser = Parser(Language(tshtml.language()))
+        target_types = ["element", "script_element", "style_element"]
+    elif lang_type == "css":
+        parser = Parser(Language(tscss.language()))
+        target_types = ["rule_set", "media_statement", "supports_statement", "keyframes_statement"]
     
-def collect_nodes(node: Node) -> list[Node]:
-    target_types = ['function_definition', 'class_definition']
+
+    tree = parser.parse(source_code)
+    root = tree.root_node
+    nodes = collect_nodes(root, target_types)
+    chunks = []
+
+    for node in nodes:
+        content = source_code[node.start_byte:node.end_byte].decode('utf-8') 
+        chunk = Document(
+            id=str(uuid4()),
+            page_content= content,
+            metadata={"start_line": node.start_point[0], "end_line": node.end_point[0], "file_path": file_path, "language": lang_type}
+        )
+        chunks.append(chunk)
+
+    return chunks
+
+# Add all nodes with the type of function and class to the list, so that their content (which is printed later) are chunked as functions and classes
+def collect_nodes(node: Node, target_types: list) -> list[Node]:
     result: list[Node] = []
 
     if node.type in target_types:
         result.append(node)
     else:
         for child in node.children:
-            result.extend(collect_nodes(child))
+            result.extend(collect_nodes(child, target_types))
 
     return result
+
+
+
+
     
 
 

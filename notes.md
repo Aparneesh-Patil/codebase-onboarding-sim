@@ -8,9 +8,10 @@
         [X] .md
         [X] .py
         [ ] .java
-        [ ] .js
-        [ ] .c
-        [ ] .cpp
+        [X] .html
+        [X] .css
+        [X] .js
+        [X] .cpp
         [ ] .go
 
     [ ] Add metadata to chunks

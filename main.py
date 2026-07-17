@@ -31,7 +31,7 @@ def create_upload_file(file: UploadFile):
 
     chunked_data = chunk.chunking_type(loaded_files)
 
-    return {"isZip": True, "fileTree": fileTree, "extensions": extensions, "projectType": projectType, "importantFiles": important_files, "chunked_data": chunked_data}
+    return {"isZip": True, "fileTree": fileTree, "extensions": extensions, "projectType": projectType, "importantFiles": important_files, "loaded_files": loaded_files, "chunked_data": chunked_data}
 
 
 
