@@ -6,6 +6,8 @@ import tree_sitter_cpp as tscpp
 import tree_sitter_javascript as tsjs
 import tree_sitter_html as tshtml
 import tree_sitter_css as tscss
+import tree_sitter_java as tsjava
+import tree_sitter_go as tsgo
 from uuid import uuid4
 
 
@@ -35,6 +37,14 @@ def chunking_type(file_map):
         elif key.lower().endswith(".css"):
             source_code = value.encode('utf-8')
             result = chunk_language(source_code, "css", key)
+            final.append(result)
+        elif key.lower().endswith(".java"):
+            source_code = value.encode('utf-8')
+            result = chunk_language(source_code, "java", key)
+            final.append(result)
+        elif key.lower().endswith(".go"):
+            source_code = value.encode('utf-8')
+            result = chunk_language(source_code, "go", key)
             final.append(result)
     
     return final 
@@ -72,7 +82,12 @@ def chunk_language(source_code: bytes, lang_type, file_path) -> list:
     elif lang_type == "css":
         parser = Parser(Language(tscss.language()))
         target_types = ["rule_set", "media_statement", "supports_statement", "keyframes_statement"]
-    
+    elif lang_type == "java":
+        parser = Parser(Language(tsjava.language()))
+        target_types = ["class_declaration", "interface_declaration", "enum_declaration", "record_declaration", "method_declaration", "constructor_declaration"]
+    elif lang_type == "go":
+        parser = parser = Parser(Language(tsgo.language()))
+        target_types = ["function_declaration", "method_declaration", "type_declaration"]
 
     tree = parser.parse(source_code)
     root = tree.root_node

@@ -4,17 +4,17 @@
     [X] Identify and load important files
     [X] Return repository analysis as JSON
 
-    [ ] Chunk files by type:
+    [X] Chunk files by type:
         [X] .md
         [X] .py
-        [ ] .java
+        [X] .java
         [X] .html
         [X] .css
         [X] .js
         [X] .cpp
-        [ ] .go
+        [X] .go
 
-    [ ] Add metadata to chunks
+    [X] Add metadata to chunks
     [ ] Flatten and validate chunks
     [ ] Create embeddings
     [ ] Store embeddings in a vector database
