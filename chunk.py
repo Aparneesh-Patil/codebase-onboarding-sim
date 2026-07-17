@@ -79,6 +79,7 @@ def chunk_language(source_code: bytes, lang_type, file_path) -> list:
     nodes = collect_nodes(root, target_types)
     chunks = []
 
+    # for each node or chunk, we get it's id, content and metadata and add to our list to return
     for node in nodes:
         content = source_code[node.start_byte:node.end_byte].decode('utf-8') 
         chunk = Document(
