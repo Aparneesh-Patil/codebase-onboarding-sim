@@ -117,12 +117,3 @@ def collect_nodes(node: Node, target_types: list) -> list[Node]:
             result.extend(collect_nodes(child, target_types))
 
     return result
-
-
-
-
-    
-
-
-
-
