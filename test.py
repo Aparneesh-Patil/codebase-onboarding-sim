@@ -1,4 +1,4 @@
-import analyzer, chunk, embeddings
+import analyzer, chunk, embeddings, prompt
 
 fileTree = analyzer.get_file_tree("data/Multithreaded-Web-Server.zip")
 
@@ -12,9 +12,17 @@ chunk_list = []
 
 for document in chunked_data:
     for doc in document:
-        chunk_list.append(doc.page_content)
+        chunk_list.append(doc)
 
-query = "What does Router do?"
+query = "What does route do?"
 
-embeddings.create_embeddings(chunk_list, query)
+embeddings.store_embeddings(chunk_list)
+result = embeddings.search_embeddings(query)
+
+context = ""
+for i in range(5):
+    context += str(result["documents"][0][i]) + str(result["metadatas"][0][i]) + "\n"
+
+prompt.ask_ai(context, query)
+
 

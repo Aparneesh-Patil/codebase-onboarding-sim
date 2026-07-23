@@ -15,10 +15,9 @@
         [X] .go
 
     [X] Add metadata to chunks
-    [ ] Flatten and validate chunks
-    [ ] Create embeddings
-    [ ] Store embeddings in a vector database
-    [ ] Retrieve relevant chunks from a question
+    [X] Create embeddings
+    [X] Store embeddings in a vector database
+    [X] Retrieve relevant chunks from a question
     [ ] Create the chat endpoint
     [ ] Return answers with source files
     [ ] Test the full RAG pipeline

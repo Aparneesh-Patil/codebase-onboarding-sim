@@ -1,19 +1,38 @@
 from sentence_transformers import SentenceTransformer
-import torch 
+import torch, chromadb
 
+embedder = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
 
-def create_embeddings(chunks, query):
-    embedder = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
+# stores vector database here
+client = chromadb.PersistentClient(path="data/chroma")
 
-    embeddings = embedder.encode_document(chunks) 
+collection = client.get_or_create_collection(name="multithreaded_web_server")
 
-    query_embedding = embedder.encode_query(query)
+def store_embeddings(chunks):
+    if collection.count() > 0:
+        return
+  
+    # The chunks page content is converted into embeddings
+    document = []
 
-    similarity_scores = embedder.similarity(query_embedding, embeddings)[0]
-    scores, indices = torch.topk(similarity_scores, k=5)
+    for chunk in chunks:
+        document.append(chunk.page_content + chunk.metadata["file_path"])
+    
+    embedding = embedder.encode_document(document, convert_to_numpy=True, normalize_embeddings=True)
 
-    print("\nQuery:", query)
-    print("Top 5 most similar sentences in chunks:")
+    collection.add(
+        embeddings=embedding.tolist(),
+        ids=[f"{i}" for i in range(len(chunks))],
+        documents= [chunk.page_content for chunk in chunks],
+        metadatas = [{"source": chunk.metadata["file_path"]} for chunk in chunks]
+    )
 
-    for score, idx in zip(scores, indices):
-        print(f"(Score: {score:.4f})", chunks[idx])
+def search_embeddings(query):
+    query_embedding = embedder.encode_query(query, convert_to_numpy=True, normalize_embeddings=True)
+
+    result = collection.query(
+        query_embeddings=query_embedding.tolist(),
+        n_results= 5
+    )
+
+    return result
