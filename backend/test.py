@@ -1,4 +1,4 @@
-import analyzer, chunk, embeddings, prompt
+import backend.analyzer as analyzer, backend.chunk as chunk, backend.embeddings as embeddings, backend.prompt as prompt
 
 fileTree = analyzer.get_file_tree("data/Multithreaded-Web-Server.zip")
 
@@ -14,9 +14,10 @@ for document in chunked_data:
     for doc in document:
         chunk_list.append(doc)
 
-query = "What does route do?"
-
 embeddings.store_embeddings(chunk_list)
+
+
+query = input("What questions do you have about this repo?\n")
 result = embeddings.search_embeddings(query)
 
 context = ""

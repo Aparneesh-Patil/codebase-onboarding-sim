@@ -9,4 +9,4 @@ def ask_ai(context, question):
 
     response = client.generate(prompt=prompt, model=model)
 
-    print(response.response)
+    return response.response
