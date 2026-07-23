@@ -1,4 +1,4 @@
-import backend.analyzer as analyzer, backend.chunk as chunk, backend.embeddings as embeddings, backend.prompt as prompt
+import analyzer, chunk, embeddings, prompt
 
 fileTree = analyzer.get_file_tree("data/Multithreaded-Web-Server.zip")
 
@@ -24,6 +24,6 @@ context = ""
 for i in range(5):
     context += str(result["documents"][0][i]) + str(result["metadatas"][0][i]) + "\n"
 
-prompt.ask_ai(context, query)
+print(prompt.ask_ai(context, query))
 
 

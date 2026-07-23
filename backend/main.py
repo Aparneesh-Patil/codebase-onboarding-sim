@@ -1,4 +1,4 @@
-import backend.chunk as chunk, backend.analyzer as analyzer, zipfile, backend.embeddings as embeddings, backend.prompt as prompt
+import chunk, analyzer, zipfile, embeddings, prompt
 from fastapi import FastAPI, UploadFile
 from pydantic import BaseModel
 
