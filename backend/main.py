@@ -1,8 +1,21 @@
 import chunk, analyzer, zipfile, embeddings, prompt
-from fastapi import FastAPI, UploadFile
+from fastapi import FastAPI, UploadFile 
 from pydantic import BaseModel
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+
+# Since FastAPI is hosted on a different domain than the frontend is hosted (prevents CORS errors)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # defines the POST's request body for the chatbot endpoint 
 class ChatRequest(BaseModel):

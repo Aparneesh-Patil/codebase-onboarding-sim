@@ -1,7 +1,9 @@
 import '../styles/FileDrop.css'
+import {analyzeRepo} from '../service/api'
 import {useRef, useState} from "react"
 
-export default function FileDrop(){
+// we use props to move the response from the POST request to a different file
+export default function FileDrop( {onAnalysisComplete} ){
 
     const uploadRef = useRef(null)
     const [file, setFile] = useState(null)
@@ -12,20 +14,22 @@ export default function FileDrop(){
     }
 
     // called when user hits the Analyze Repo button
-    const handleAnalyze = (e) => {
+    const handleAnalyze = async (e) => {
         // separates the button click to the div click
         e.stopPropagation()
 
         if (!file) return
 
-        console.log("Analyze repository")
-    }
-
-    const handleUploadBoxClick = () => {
-        if (uploadRef.current !== null) {
-            uploadRef.current.click()
+        // tries to get a response else prints out error (which is thrown by api.js)
+        try{
+            const result = await analyzeRepo(file)
+            onAnalysisComplete(result)
+        }
+        catch(error){
+            console.error(error)
         }
     }
+
 
     return(
         <div className="upload-page">
@@ -41,7 +45,7 @@ export default function FileDrop(){
                     </p>
                 </div>
 
-                <div className="upload-box" onClick={handleUploadBoxClick}>
+                <div className="upload-box" onClick={() => uploadRef.current.click()}>
                     {/* The screen changes depending on whether a file has been uploaded or not */}
                     {file ? (
                         // File exists
