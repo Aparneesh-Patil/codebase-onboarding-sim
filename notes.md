@@ -18,7 +18,10 @@
     [X] Create embeddings
     [X] Store embeddings in a vector database
     [X] Retrieve relevant chunks from a question
-    [ ] Create the chat endpoint
-    [ ] Return answers with source files
-    [ ] Test the full RAG pipeline
+    [X] Create the chat endpoint
+    [X] Return answers with source files
+    [X] Test the full RAG pipeline
+    [ ] Create an upload UI
+    [ ] Repo File tree UI
+    [ ] Create chatbot UI
 
