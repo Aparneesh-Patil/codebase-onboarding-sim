@@ -21,7 +21,7 @@
     [X] Create the chat endpoint
     [X] Return answers with source files
     [X] Test the full RAG pipeline
-    [ ] Create an upload UI
-    [ ] Repo File tree UI
+    [X] Create an upload UI
+    [X] Repo File tree UI
     [ ] Create chatbot UI
 

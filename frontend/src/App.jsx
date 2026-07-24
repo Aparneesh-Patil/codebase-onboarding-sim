@@ -9,7 +9,9 @@ function App() {
 
   // if analysis doesn't exist, we call FileDrop to get the analyzed zipped file, else we send the analyzed zipped file to FileTree (to print out the FileTree)
   return (
-    <>
+    <div className="parent">
+      <h1>Codebase Onboarding Simulator</h1>
+
       {!analysis ? (
         <FileDrop onAnalysisComplete={setAnalysis} />
       ) : (
@@ -22,7 +24,7 @@ function App() {
         </main>
       </div>
       )}
-    </>
+    </div>
   );
     
 }

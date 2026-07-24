@@ -1,15 +1,17 @@
-.workspace {
-  min-height: 100vh;
-  display: grid;
-  grid-template-columns: minmax(240px, 320px) 1fr;
-
-  background: linear-gradient(
+.parent{
+    background: linear-gradient(
     135deg,
     #4c1d95,
     #6d28d9,
     #a855f7,
     #d8b4fe
   );
+}
+
+.workspace {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: minmax(240px, 320px) 1fr;
 }
 
 .file-panel {

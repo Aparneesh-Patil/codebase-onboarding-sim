@@ -1,19 +1,61 @@
-.workspace {
-  min-height: 100vh;
-  display: grid;
-  grid-template-columns: minmax(240px, 320px) 1fr;
-}
-
-.file-panel {
+.file-tree {
+  height: 100vh;
   padding: 20px;
   overflow-y: auto;
-  border-right: 1px solid #e5e7eb;
-  background: #fafafa;
+  color: #f4f4f5;
 }
 
-.chat-panel {
-  min-width: 0;
+.file-tree h2 {
+  margin: 0 0 20px;
+  font-size: 18px;
+}
+
+.tree-list {
+  margin: 0;
+  padding-left: 18px;
+  list-style: none;
+}
+
+.file-tree > .tree-list {
+  padding-left: 0;
+}
+
+.tree-item {
+  margin: 4px 0;
+  list-style: none;
+}
+
+.folder-row,
+.file-row {
   display: flex;
-  flex-direction: column;
-  background: white;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  padding: 5px 8px;
+  border-radius: 6px;
+}
+
+.folder-row {
+  color: #ddd6fe;
+  font-weight: 600;
+}
+
+.file-row {
+  color: #d4d4d8;
+}
+
+.folder-row:hover,
+.file-row:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.tree-icon {
+  flex-shrink: 0;
+  font-size: 14px;
+}
+
+.tree-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
