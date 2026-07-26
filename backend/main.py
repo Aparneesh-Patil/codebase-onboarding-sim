@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
-# Since FastAPI is hosted on a different domain than the frontend is hosted (prevents CORS errors)
+# Since FastAPI is hosted on a different domain than the frontend is hosted, this prevents CORS errors
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[

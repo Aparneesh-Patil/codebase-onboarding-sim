@@ -1,8 +1,12 @@
 .file-tree {
-  height: 100vh;
+  height: 100%;
+  box-sizing: border-box;
   padding: 20px;
   overflow-y: auto;
   color: #f4f4f5;
+
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 .file-tree h2 {
