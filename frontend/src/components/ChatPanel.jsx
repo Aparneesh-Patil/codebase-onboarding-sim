@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react'
 import '../styles/ChatPanel.css'
 import { sendChatMessage } from '../service/api'
 
-function ChatPanel() {
+function ChatPanel( {repoId}) {
     const [input, setInput] = useState('')
     const [messages, setMessages] = useState([])
     const [isLoading, setIsLoading] = useState(false)
@@ -58,8 +58,8 @@ function ChatPanel() {
         }
 
         const userMessage = {
-        role: 'user',
-        content: trimmedQuestion
+            role: 'user',
+            content: trimmedQuestion
         }
 
         setMessages((previousMessages) => [
@@ -72,7 +72,7 @@ function ChatPanel() {
 
         // regardless of whether we run into an error or not, our loading animation stops (using the finally button)
         try {
-            const data = await sendChatMessage(trimmedQuestion)
+            const data = await sendChatMessage(trimmedQuestion, repoId)
             
             typeAssistantMessage(data.response)
         } catch (error) {

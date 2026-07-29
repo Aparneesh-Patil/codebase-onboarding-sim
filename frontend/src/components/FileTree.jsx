@@ -23,17 +23,24 @@ function buildTree(paths) {
   return root
 }
 
-// for the created js object, we determine whether the object has children (folder) or doesn't (file)
-function TreeNode({ tree }) {
+// A recursive function that determine whether the current item has children (folder) or doesn't (file)
+function TreeNode({ tree, currentPath = '',  onFileClick }) {
   return (
     <ul className="tree-list">
       {Object.entries(tree).map(([name, children]) => {
         // checks for whether we have a folder or file (folder = 1 or more children)
         const isFolder = Object.keys(children).length > 0
 
+        const fullPath = currentPath ? `${currentPath}/${name}` : name
+
         return (
           <li key={name} className="tree-item">
-            <div className={isFolder ? "folder-row" : "file-row"}>
+            <div className={isFolder ? "folder-row" : "file-row"} onClick={() => {
+              if(!isFolder){
+                onFileClick(fullPath)
+              }
+            }}>
+              
               <span className="tree-icon">
                 {isFolder ? <FaFolder /> : <FaFile />}
               </span>
@@ -41,7 +48,7 @@ function TreeNode({ tree }) {
               <span className="tree-name">{name}</span>
             </div>
 
-            {isFolder && <TreeNode tree={children} />}
+            {isFolder && (<TreeNode tree={children} currentPath={fullPath} onFileClick={onFileClick}/>)}
           </li>
         )
       })}
@@ -50,14 +57,13 @@ function TreeNode({ tree }) {
 }
 
 
-export default function FileTree({ files }) {
-    const tree = buildTree(files)
-
+export default function FileTree({ files, onFileClick }) {
+  const tree = buildTree(files)
 
   return (
     <section className="file-tree">
       <h2>Repo Files</h2>
-      <TreeNode tree={tree} />
+      <TreeNode tree={tree} onFileClick={onFileClick}/>
     </section>
   );
 
