@@ -1,4 +1,5 @@
 import zipfile
+from pathlib import Path
 
 # used for determining the file tree
 IGNORED_PATH_PARTS = {".git", "node_modules", "__pycache__", "target", "build", "dist", ".venv", ".vscode", ".idea", ".next", "cache"}
@@ -125,10 +126,11 @@ def detect_important(fileTree):
     return importantFiles
 
 # loads the content of important file into text (used for the chunker)
-def load_file(file_obj, important_files):
+def load_file(file_obj, important_files, repo_id):
     loaded_files = {}
 
     with zipfile.ZipFile(file_obj, 'r') as zf:
+        zf.extractall("temp_repo/" + repo_id)
         for file_name in zf.namelist():
             if file_name in important_files:
                 with zf.open(file_name, 'r') as r:

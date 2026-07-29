@@ -1,6 +1,23 @@
-import analyzer, chunk, embeddings, prompt
+import analyzer, zip_storage #, chunk, embeddings, prompt,
+from pathlib import Path 
 
-fileTree = analyzer.get_file_tree("data/Multithreaded-Web-Server.zip")
+fileTree = analyzer.get_file_tree("./data/Multithreaded-Web-Server.zip")
+
+important_files = analyzer.detect_important(fileTree)
+
+zip_id = zip_storage.hash_file("./data/Multithreaded-Web-Server.zip")
+dir_path = Path("temp_repo/" + zip_id)
+dir_path.mkdir(parents=True, exist_ok=True)
+
+dir_path = Path("temp_repo/" + zip_id + "/embeddings")
+dir_path.mkdir(parents=True, exist_ok=True)
+
+loaded_files = analyzer.load_file("./data/Multithreaded-Web-Server.zip", important_files, zip_id)
+
+print(zip_id)
+
+
+"""fileTree = analyzer.get_file_tree("data/Multithreaded-Web-Server.zip")
 
 important_files = analyzer.detect_important(fileTree)
 
@@ -26,4 +43,4 @@ for i in range(5):
 
 print(prompt.ask_ai(context, query))
 
-
+"""

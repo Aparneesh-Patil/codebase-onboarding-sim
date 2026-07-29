@@ -22,4 +22,6 @@
     [X] Create an upload UI
     [X] Repo File tree UI
     [X] Create chatbot UI
+    [X] Add local storage for each uploaded file
+    [ ] Implement access to files through the file tree
 
