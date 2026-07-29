@@ -1,5 +1,5 @@
 import chunk, analyzer, zipfile, embeddings, prompt, zip_storage
-from fastapi import FastAPI, UploadFile 
+from fastapi import FastAPI, UploadFile, HTTPException
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 from pathlib import Path
@@ -21,6 +21,7 @@ app.add_middleware(
 # defines the POST's request body for the chatbot endpoint 
 class ChatRequest(BaseModel):
     query: str
+    repo_id: str
 
 @app.get('/')
 def read_root():
@@ -44,9 +45,6 @@ def create_upload_file(file: UploadFile):
     dir_path = Path("temp_repo/" + repo_id)
     dir_path.mkdir(parents=True, exist_ok=True)
 
-    dir_path = Path("temp_repo/" + repo_id + "/embeddings")
-    dir_path.mkdir(parents=True, exist_ok=True)
-
     fileTree = analyzer.get_file_tree(file_obj)
 
     extensions = analyzer.count_extensions(fileTree)
@@ -65,14 +63,14 @@ def create_upload_file(file: UploadFile):
         for doc in document:
             chunk_list.append(doc)
 
-    embeddings.store_embeddings(chunk_list)
+    embeddings.store_embeddings(chunk_list, repo_id)
 
     return {"repoId": repo_id, "isZip": True, "fileTree": fileTree, "extensions": extensions, "projectType": projectType, "importantFiles": important_files}
 
 @app.post("/chatbot")
 def reply_with_chatbot(chat : ChatRequest):
 
-    result = embeddings.search_embeddings(chat.query)
+    result = embeddings.search_embeddings(chat.query, chat.repo_id)
 
     context = ""
     for i in range(5):
@@ -81,6 +79,27 @@ def reply_with_chatbot(chat : ChatRequest):
     response = prompt.ask_ai(context, chat.query)
 
     return {"response": response}
+
+# GET request for getting each specfic file
+@app.get("/repos/{repo_id}/files")
+def get_files(repo_id: str, path: str):
+    repo_directory = Path("temp_repo/" + repo_id).resolve()
+    requested_file = Path("temp_repo/" + repo_id + "/" + path).resolve()
+
+    if repo_directory not in requested_file.parents:
+        raise HTTPException(status_code=400, detail="Invalid file path")
+
+    if not requested_file.exists() or not requested_file.is_file():
+        raise HTTPException(status_code=404, detail="File not found") 
+
+
+    content = requested_file.read_text(
+        encoding="utf-8",
+        errors="replace"
+    )
+
+    return {"path": path, "content": content}
+    
 
 
 
